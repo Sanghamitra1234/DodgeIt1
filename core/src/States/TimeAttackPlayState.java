@@ -99,7 +99,7 @@ public class TimeAttackPlayState extends state implements InputProcessor {
                 }
                 if (bl2.getRectangle().overlaps(usr)) {
                     if (currentColor == bl2.getClr()) {
-                        score += 1;
+                        score += 10;
                         bl.removeIndex(index);
                     } else {
                         if (score > DodgeIt.preferences.getInteger("HighScoreTime")) {
@@ -192,6 +192,14 @@ public class TimeAttackPlayState extends state implements InputProcessor {
         public boolean touchDown ( int screenX, int screenY, int pointer, int button){
             FLAGtch = 2;
             Strt = 1;
+            camera.unproject(touchpt.set(screenX, screenY, 0));
+            if (usrrctcnt == 0) {
+                usr = new Rectangle(touchpt.x, touchpt.y, 50, 50);
+                usrrctcnt = 1;
+            }
+            if (usrrctcnt == 1) {
+                usr.set(touchpt.x, touchpt.y, 50, 50);
+            }
             return false;
         }
 

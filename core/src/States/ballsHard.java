@@ -14,7 +14,7 @@ public class ballsHard {
     public Rectangle rectangle,Big1;
     public Vector2 pos;
     public Vector2 ac;
-    private static int Timepassed1=0;
+    private float Timepassed1 = 0;
     private int xval,yval;
     public Vector2 vel;
     private Random rand;
@@ -34,39 +34,33 @@ public class ballsHard {
         return rectangle;
     }
 
-    public void updatePos() {     int xlow = (int) (pos.x - 220);
-        int xhigh = (int) (pos.x) + 220;
-        int ylow = (int) (pos.y) - 290;
+    public void updatePos() {
+        int ylow = (int) (pos.y) - 240;
         int yhigh = (int) (pos.y + 290);
-        if (xlow <= 0) {
-            xlow = 0;
-        }
-        if (xhigh >= 480) {
-            xhigh = 480;
-        }
         if (ylow <= 0) {
             ylow = 0;
         }
         if (yhigh >= 800) {
             yhigh = 800;
         }
-        Big1 = new Rectangle(xlow, ylow, xhigh - xlow, yhigh - ylow);
+        Big1 = new Rectangle(0, ylow, 480, yhigh - ylow);
+        Timepassed1 += Gdx.graphics.getDeltaTime();
         if (Big1.overlaps(HardPlayState.getUsr())){
             if (HardPlayState.getTouchpt().x-pos.x>0){xval=1;}else {xval=(-1);}
-            ac.x = (3+rand.nextInt(5))*(xval);
+            ac.x = (6 + rand.nextInt(4)) * (xval);
             if (HardPlayState.getTouchpt().y-pos.y>0){yval=1;}else {yval=(-1);}
             ac.y = ac.x *((pos.y-(HardPlayState.getTouchpt().y))/(pos.x-(HardPlayState.getTouchpt().x)));
             if (ac.y>0){}else {ac.y*=-1;}
             ac.y*=yval;
+            Timepassed1 = 0;
         }
-        if (Timepassed1==100){
+        if (Timepassed1 > 2) {
             if (HardPlayState.getTouchpt().x-pos.x>0){xval=1;}else {xval=(-1);}
             ac.x = (3+rand.nextInt(5))*(xval);
             if (HardPlayState.getTouchpt().y-pos.y>0){yval=1;}else {yval=(-1);}
             ac.y = ac.x *((pos.y-(HardPlayState.getTouchpt().y))/(pos.x-(HardPlayState.getTouchpt().x)));
             if (ac.y>0){}else {ac.y*=-1;}
             ac.y*=yval;
-            Timepassed1=0;
         }
         if (ac.x==0&&ac.y==0){ac.x = rand.nextInt(5);
         ac.y = rand.nextInt(5);}

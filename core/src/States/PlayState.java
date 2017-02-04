@@ -97,6 +97,7 @@ public class PlayState extends state implements InputProcessor {
         spriteBatch.draw(bg, 0, 0, 480, 800);
         if (Strt == 0) {
             fnt.draw(spriteBatch, "HOLD TO PLAY", 80, 500);
+            //spriteBatch.draw(userbtn,100,400,50,50);
         }
         if (FLAGtch == 2) {
             spriteBatch.draw(userbtn, touchpt.x, touchpt.y, 50, 50);
@@ -153,6 +154,14 @@ public class PlayState extends state implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         FLAGtch = 2;
+        camera.unproject(touchpt.set(screenX, screenY, 0));
+        if (usrrctcnt == 0) {
+            usr = new Rectangle(touchpt.x, touchpt.y, 50, 50);
+            usrrctcnt = 1;
+        }
+        if (usrrctcnt == 1) {
+            usr.set(touchpt.x, touchpt.y, 50, 50);
+        }
         Strt = 1;
         return false;
     }

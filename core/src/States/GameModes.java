@@ -1,6 +1,7 @@
 package States;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,20 +14,27 @@ import com.sleepygamers.game.DodgeIt;
  */
 
 public class GameModes extends state implements InputProcessor {
-    private Texture bg,classic,hard,timeattack;
-    private Rectangle cl,hrd,tme;
+    private Texture bg, classic, hard, timeattack, question;
+    private Rectangle cl, hrd, tme, q1, q2, q3;
     private Vector3 touchpt;
+
     public GameModes(GameStateManager gameStateManager) {
         super(gameStateManager);
         bg = new Texture("bg7.jpg");
-        classic=new Texture("classic.png");
+        classic = new Texture("classic.png");
+        question = new Texture("question.png");
         touchpt = new Vector3();
         hard = new Texture("hardcore.png");
-        cl = new Rectangle(140,550,200,200);
-        hrd = new Rectangle(140,50,200,200);
-        tme = new Rectangle(140,300,200,200);
+        cl = new Rectangle(140, 550, 200, 200);
+        q1 = new Rectangle(330, 580, 150, 150);
+        hrd = new Rectangle(140, 50, 200, 200);
+        q2 = new Rectangle(330, 80, 150, 150);
+        tme = new Rectangle(140, 300, 200, 200);
+        q3 = new Rectangle(330, 330, 150, 150);
         timeattack = new Texture("TimeAttack.png");
-        camera.setToOrtho(false, DodgeIt.WIDTH,DodgeIt.HIGHT);
+        camera.setToOrtho(false, DodgeIt.WIDTH, DodgeIt.HIGHT);
+        Gdx.input.setInputProcessor(this);
+        Gdx.input.setCatchBackKey(true);
     }
 
     @Override
@@ -50,9 +58,34 @@ public class GameModes extends state implements InputProcessor {
                 if (OverlapTester.pointInRectangle(tme, touchpt.x, touchpt.y)) {
                     gameStateManager.set(new TimeAttackPlayState(gameStateManager));
                 }
-            }}}
+            }
+        }
+        if (Gdx.input.justTouched()) {
+            camera.unproject(touchpt.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+            if (OverlapTester.pointInRectangle(q1, touchpt.x, touchpt.y)) {
+                gameStateManager.set(new ClassicHint(gameStateManager));
+
+            }
+        }
+        if (Gdx.input.justTouched()) {
+            camera.unproject(touchpt.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+            if (OverlapTester.pointInRectangle(q3, touchpt.x, touchpt.y)) {
+                gameStateManager.set(new TimeAttackHint(gameStateManager));
+
+            }
+        }
+        if (Gdx.input.justTouched()) {
+            camera.unproject(touchpt.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+            if (OverlapTester.pointInRectangle(q2, touchpt.x, touchpt.y)) {
+                gameStateManager.set(new HardCoreHint(gameStateManager));
+
+            }
+        }
+    }
+
     @Override
-    public void update(float dt) {handleInput();
+    public void update(float dt) {
+        handleInput();
 
     }
 
@@ -60,21 +93,32 @@ public class GameModes extends state implements InputProcessor {
     public void render(SpriteBatch spriteBatch) {
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
-        spriteBatch.draw(bg,0,0,480,800);
-        spriteBatch.draw(hard,140,50,200,200);
-        spriteBatch.draw(timeattack,140,300,200,200);
-        spriteBatch.draw(classic,140,550,200,200);
+        spriteBatch.draw(bg, 0, 0, 480, 800);
+        spriteBatch.draw(hard, 140, 50, 200, 200);
+        spriteBatch.draw(timeattack, 140, 300, 200, 200);
+        spriteBatch.draw(classic, 140, 550, 200, 200);
+        spriteBatch.draw(question, 330, 580, 150, 150);
+        spriteBatch.draw(question, 330, 80, 150, 150);
+        spriteBatch.draw(question, 330, 330, 150, 150);
         spriteBatch.end();
 
     }
 
     @Override
     public void dispose() {
+        bg.dispose();
+        classic.dispose();
+        question.dispose();
+        hard.dispose();
+        timeattack.dispose();
 
     }
 
     @Override
     public boolean keyDown(int keycode) {
+        if (keycode == Input.Keys.BACK) {
+            gameStateManager.set(new MenuState(gameStateManager));
+        }
         return false;
     }
 

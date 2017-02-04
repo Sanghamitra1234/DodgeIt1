@@ -133,6 +133,14 @@ public class HardPlayState extends state implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         FLAGtch = 2;
         Strt = 1;
+        camera.unproject(touchpt.set(screenX, screenY, 0));
+        if (usrrctcnt == 0) {
+            usr = new Rectangle(touchpt.x, touchpt.y, 50, 50);
+            usrrctcnt = 1;
+        }
+        if (usrrctcnt == 1) {
+            usr.set(touchpt.x, touchpt.y, 50, 50);
+        }
         return false;
     }
 
