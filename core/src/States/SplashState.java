@@ -13,7 +13,7 @@ public class SplashState extends state {
     private Texture logo;
     public SplashState(GameStateManager gameStateManager) {
         super(gameStateManager);
-        logo = new Texture("logo.JPG");
+        logo = new Texture("logobg.png");
         camera.setToOrtho(false, DodgeIt.WIDTH,DodgeIt.HIGHT);
     }
 
@@ -26,7 +26,7 @@ public class SplashState extends state {
     public void update(float dt){
         if(FLAG==1){
     try {
-        Thread.sleep(1000);
+        Thread.sleep(3000);
     }catch (InterruptedException e) {
         e.printStackTrace();
     }
@@ -37,7 +37,7 @@ public class SplashState extends state {
     public void render(SpriteBatch spriteBatch) {
         spriteBatch.setProjectionMatrix(camera.combined);
     spriteBatch.begin();
-        spriteBatch.draw(logo,camera.position.x-(logo.getWidth()/2),camera.position.y-(logo.getHeight()/2));
+        spriteBatch.draw(logo, 0, 0, 480, 800);
     spriteBatch.end();
         FLAG = 1;
     }

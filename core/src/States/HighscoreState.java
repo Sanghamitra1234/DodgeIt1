@@ -21,8 +21,8 @@ public class HighscoreState extends state implements InputProcessor {
         super(gameStateManager);
         Gdx.input.setCatchBackKey(true);
         Gdx.input.setInputProcessor(this);
-        bg = new Texture("bg7.jpg");
-        fnt = new BitmapFont(Gdx.files.internal("high.fnt"));
+        bg = new Texture("HighScoreS.png");
+        fnt = new BitmapFont(Gdx.files.internal("cour.fnt"));
         camera.setToOrtho(false, DodgeIt.WIDTH, DodgeIt.HIGHT);
     }
 
@@ -41,16 +41,16 @@ public class HighscoreState extends state implements InputProcessor {
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
         spriteBatch.draw(bg, 0, 0, 480, 800);
-        fnt.draw(spriteBatch, "HIGH SCORE", 100, 700);
-        fnt.draw(spriteBatch,"CLASSIC :    "+ Integer.toString(DodgeIt.preferences.getInteger("HighScore")), 20, 600);
-        fnt.draw(spriteBatch,"TIME ATTACK :"+ Integer.toString(DodgeIt.preferences.getInteger("HighScoreTime")), 20, 450);
-        fnt.draw(spriteBatch,"HARDCORE :   "+ Integer.toString(DodgeIt.preferences.getInteger("HighScoreHard")), 20, 300);
+        fnt.draw(spriteBatch, Integer.toString(DodgeIt.preferences.getInteger("HighScore")), 350, 640);
+        fnt.draw(spriteBatch, Integer.toString(DodgeIt.preferences.getInteger("HighScoreTime")), 350, 558);
+        fnt.draw(spriteBatch, Integer.toString(DodgeIt.preferences.getInteger("HighScoreHard")), 350, 478);
         spriteBatch.end();
     }
 
     @Override
     public void dispose() {
-
+        fnt.dispose();
+        bg.dispose();
     }
 
     @Override

@@ -3,6 +3,7 @@ package States;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -17,6 +18,7 @@ public class GameModes extends state implements InputProcessor {
     private Texture bg, classic, hard, timeattack, question;
     private Rectangle cl, hrd, tme, q1, q2, q3;
     private Vector3 touchpt;
+    public Sound mnu;
 
     public GameModes(GameStateManager gameStateManager) {
         super(gameStateManager);
@@ -31,6 +33,7 @@ public class GameModes extends state implements InputProcessor {
         q2 = new Rectangle(330, 80, 150, 150);
         tme = new Rectangle(140, 300, 200, 200);
         q3 = new Rectangle(330, 330, 150, 150);
+        mnu = Gdx.audio.newSound(Gdx.files.internal("mnu.wav"));
         timeattack = new Texture("TimeAttack.png");
         camera.setToOrtho(false, DodgeIt.WIDTH, DodgeIt.HIGHT);
         Gdx.input.setInputProcessor(this);
@@ -42,6 +45,9 @@ public class GameModes extends state implements InputProcessor {
         if (Gdx.input.justTouched()) {
             camera.unproject(touchpt.set(Gdx.input.getX(), Gdx.input.getY(), 0));
             if (OverlapTester.pointInRectangle(cl, touchpt.x, touchpt.y)) {
+                DodgeIt.music.stop();
+                if (DodgeIt.SOUNDON == 1)
+                    mnu.play();
                 gameStateManager.set(new PlayState(gameStateManager));
             }
 
@@ -49,6 +55,9 @@ public class GameModes extends state implements InputProcessor {
         if (Gdx.input.justTouched()) {
             camera.unproject(touchpt.set(Gdx.input.getX(), Gdx.input.getY(), 0));
             if (OverlapTester.pointInRectangle(hrd, touchpt.x, touchpt.y)) {
+                DodgeIt.music.stop();
+                if (DodgeIt.SOUNDON == 1)
+                    mnu.play();
                 gameStateManager.set(new HardPlayState(gameStateManager));
             }
 
@@ -56,6 +65,9 @@ public class GameModes extends state implements InputProcessor {
             if (Gdx.input.justTouched()) {
                 camera.unproject(touchpt.set(Gdx.input.getX(), Gdx.input.getY(), 0));
                 if (OverlapTester.pointInRectangle(tme, touchpt.x, touchpt.y)) {
+                    DodgeIt.music.stop();
+                    if (DodgeIt.SOUNDON == 1)
+                        mnu.play();
                     gameStateManager.set(new TimeAttackPlayState(gameStateManager));
                 }
             }
@@ -63,6 +75,8 @@ public class GameModes extends state implements InputProcessor {
         if (Gdx.input.justTouched()) {
             camera.unproject(touchpt.set(Gdx.input.getX(), Gdx.input.getY(), 0));
             if (OverlapTester.pointInRectangle(q1, touchpt.x, touchpt.y)) {
+                if (DodgeIt.SOUNDON == 1)
+                    mnu.play();
                 gameStateManager.set(new ClassicHint(gameStateManager));
 
             }
@@ -70,6 +84,8 @@ public class GameModes extends state implements InputProcessor {
         if (Gdx.input.justTouched()) {
             camera.unproject(touchpt.set(Gdx.input.getX(), Gdx.input.getY(), 0));
             if (OverlapTester.pointInRectangle(q3, touchpt.x, touchpt.y)) {
+                if (DodgeIt.SOUNDON == 1)
+                    mnu.play();
                 gameStateManager.set(new TimeAttackHint(gameStateManager));
 
             }
@@ -77,6 +93,8 @@ public class GameModes extends state implements InputProcessor {
         if (Gdx.input.justTouched()) {
             camera.unproject(touchpt.set(Gdx.input.getX(), Gdx.input.getY(), 0));
             if (OverlapTester.pointInRectangle(q2, touchpt.x, touchpt.y)) {
+                if (DodgeIt.SOUNDON == 1)
+                    mnu.play();
                 gameStateManager.set(new HardCoreHint(gameStateManager));
 
             }
@@ -111,6 +129,7 @@ public class GameModes extends state implements InputProcessor {
         question.dispose();
         hard.dispose();
         timeattack.dispose();
+        mnu.dispose();
 
     }
 

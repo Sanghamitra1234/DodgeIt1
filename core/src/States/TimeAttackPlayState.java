@@ -3,6 +3,8 @@ package States;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -33,6 +35,9 @@ public class TimeAttackPlayState extends state implements InputProcessor {
     private Texture bg, userbtn, red, blue, green, yellow, yellowBar, greenBar, blueBar, redBar;
     private Rectangle usr;
     private Random random;
+    public static Music mus;
+    public Sound collect;
+    public static Sound gameover;
 
     TimeAttackPlayState(GameStateManager gameStateManager) {
         super(gameStateManager);
@@ -50,6 +55,15 @@ public class TimeAttackPlayState extends state implements InputProcessor {
         yellowBar = new Texture("yellowBar.png");
         greenBar = new Texture("greenBar.png");
         touchpt = new Vector3();
+        gameover = Gdx.audio.newSound(Gdx.files.internal("gameover.wav"));
+        if (DodgeIt.MUSICON == 1) {
+            mus = Gdx.audio.newMusic(Gdx.files.internal("mus.mp3"));
+            mus.play();
+            mus.setLooping(true);
+        }
+        if (DodgeIt.SOUNDON == 1) {
+            collect = Gdx.audio.newSound(Gdx.files.internal("collect.mp3"));
+        }
         Gdx.input.setInputProcessor(this);
         Gdx.input.setCatchBackKey(true);
         camera.setToOrtho(false, DodgeIt.WIDTH, DodgeIt.HIGHT);
@@ -63,6 +77,8 @@ public class TimeAttackPlayState extends state implements InputProcessor {
     @Override
     public void update(float dt) {
         if (FLAGtch > 2) {
+            if (DodgeIt.SOUNDON == 1)
+                gameover.play();
             gameStateManager.set(new GameOver(gameStateManager, score, 3));
         }
         if (FLAGtch == 2) {
@@ -76,10 +92,11 @@ public class TimeAttackPlayState extends state implements InputProcessor {
                 }
             }
             if (time == 0) {
-                if (score > DodgeIt.preferences.getInteger("HighScoreTime")) {
-                    DodgeIt.preferences.putInteger("HighScoreTime", score);
-                    DodgeIt.preferences.flush();
+                if (DodgeIt.MUSICON == 1) {
+                    mus.stop();
                 }
+                if (DodgeIt.SOUNDON == 1)
+                    gameover.play();
                 gameStateManager.set(new GameOver(gameStateManager, score, 3));
             }
             newballcnt++;
@@ -100,135 +117,149 @@ public class TimeAttackPlayState extends state implements InputProcessor {
                 if (bl2.getRectangle().overlaps(usr)) {
                     if (currentColor == bl2.getClr()) {
                         score += 10;
+                        if (DodgeIt.SOUNDON == 1) {
+                            collect.play();
+                        }
                         bl.removeIndex(index);
                     } else {
-                        if (score > DodgeIt.preferences.getInteger("HighScoreTime")) {
-                            DodgeIt.preferences.putInteger("HighScoreTime", score);
-                            DodgeIt.preferences.flush();}
-                            gameStateManager.set(new GameOver(gameStateManager, score, 3));
+                        if (DodgeIt.MUSICON == 1) {
+                            mus.stop();
                         }
-                    }
-                    index++;
-                }
-            }
-        }
-
-        @Override
-        public void render (SpriteBatch spriteBatch){
-            spriteBatch.setProjectionMatrix(camera.combined);
-            spriteBatch.begin();
-            spriteBatch.setColor(1, 1, 1, 1);
-            spriteBatch.draw(bg, 0, 0, 480, 800);
-            if (Strt == 0) {
-                fnt.draw(spriteBatch, "HOLD TO PLAY", 80, 500);
-            }
-            if (FLAGtch == 2) {
-                spriteBatch.draw(userbtn, touchpt.x, touchpt.y, 50, 50);
-                for (balls bl2 : bl) {
-                    if (bl2.getClr() == 0) {
-                        spriteBatch.draw(yellow, bl2.getPos().x, bl2.getPos().y, 50, 50);
-                    }
-                    if (bl2.getClr() == 1) {
-                        spriteBatch.draw(green, bl2.getPos().x, bl2.getPos().y, 50, 50);
-                    }
-                    if (bl2.getClr() == 2) {
-                        spriteBatch.draw(blue, bl2.getPos().x, bl2.getPos().y, 50, 50);
-                    }
-                    if (bl2.getClr() == 3) {
-                        spriteBatch.draw(red, bl2.getPos().x, bl2.getPos().y, 50, 50);
+                        if (DodgeIt.SOUNDON == 1)
+                            gameover.play();
+                        gameStateManager.set(new GameOver(gameStateManager, score, 3));
                     }
                 }
-                fnt.draw(spriteBatch, "0:" + Integer.toString(time), 10, 760);
-                fnt.draw(spriteBatch, Integer.toString(score), 400, 760);
-                if (currentColor == 0) {
-                    spriteBatch.draw(yellowBar, 0, 790, 480, 10);
-                    spriteBatch.draw(yellowBar, 0, 0, 480, 10);
-                } else if (currentColor == 1) {
-                    spriteBatch.draw(greenBar, 0, 790, 480, 10);
-                    spriteBatch.draw(greenBar, 0, 0, 480, 10);
-                } else if (currentColor == 2) {
-                    spriteBatch.draw(blueBar, 0, 790, 480, 10);
-                    spriteBatch.draw(blueBar, 0, 0, 480, 10);
-                } else {
-                    spriteBatch.draw(redBar, 0, 790, 480, 10);
-                    spriteBatch.draw(redBar, 0, 0, 480, 10);
-                }
+                index++;
             }
-            spriteBatch.end();
-
-        }
-
-        @Override
-        public void dispose () {
-            fnt.dispose();
-            red.dispose();
-            blue.dispose();
-            green.dispose();
-            yellow.dispose();
-            userbtn.dispose();
-            bg.dispose();
-
-        }
-
-        @Override
-        public boolean keyDown ( int keycode){
-            if (keycode == Input.Keys.BACK) {
-                gameStateManager.set(new MenuState(gameStateManager));
-            }
-            return false;
-        }
-
-        @Override
-        public boolean keyUp ( int keycode){
-            return false;
-        }
-
-        @Override
-        public boolean keyTyped ( char character){
-            return false;
-        }
-
-        @Override
-        public boolean touchDown ( int screenX, int screenY, int pointer, int button){
-            FLAGtch = 2;
-            Strt = 1;
-            camera.unproject(touchpt.set(screenX, screenY, 0));
-            if (usrrctcnt == 0) {
-                usr = new Rectangle(touchpt.x, touchpt.y, 50, 50);
-                usrrctcnt = 1;
-            }
-            if (usrrctcnt == 1) {
-                usr.set(touchpt.x, touchpt.y, 50, 50);
-            }
-            return false;
-        }
-
-        @Override
-        public boolean touchUp ( int screenX, int screenY, int pointer, int button){
-            FLAGtch++;
-            return false;
-        }
-
-        @Override
-        public boolean touchDragged ( int screenX, int screenY, int pointer){
-            camera.unproject(touchpt.set(screenX, screenY, 0));
-            if (usrrctcnt == 0) {
-                usr = new Rectangle(touchpt.x, touchpt.y, 50, 50);
-                usrrctcnt = 1;
-            }
-            if (usrrctcnt == 1) {
-                usr.set(touchpt.x, touchpt.y, 50, 50);
-            }
-            return false;
-        }
-
-        @Override
-        public boolean mouseMoved ( int screenX, int screenY){
-            return false;
-        }
-
-        @Override
-        public boolean scrolled ( int amount){
-            return false;
         }
     }
+
+    @Override
+    public void render(SpriteBatch spriteBatch) {
+        spriteBatch.setProjectionMatrix(camera.combined);
+        spriteBatch.begin();
+        spriteBatch.setColor(1, 1, 1, 1);
+        spriteBatch.draw(bg, 0, 0, 480, 800);
+        if (Strt == 0) {
+            fnt.draw(spriteBatch, "HOLD TO PLAY", 80, 500);
+        }
+        if (FLAGtch == 2) {
+            spriteBatch.draw(userbtn, touchpt.x, touchpt.y, 50, 50);
+            for (balls bl2 : bl) {
+                if (bl2.getClr() == 0) {
+                    spriteBatch.draw(yellow, bl2.getPos().x, bl2.getPos().y, 50, 50);
+                }
+                if (bl2.getClr() == 1) {
+                    spriteBatch.draw(green, bl2.getPos().x, bl2.getPos().y, 50, 50);
+                }
+                if (bl2.getClr() == 2) {
+                    spriteBatch.draw(blue, bl2.getPos().x, bl2.getPos().y, 50, 50);
+                }
+                if (bl2.getClr() == 3) {
+                    spriteBatch.draw(red, bl2.getPos().x, bl2.getPos().y, 50, 50);
+                }
+            }
+            fnt.draw(spriteBatch, "0:" + Integer.toString(time), 10, 760);
+            if (score < 1000) {
+                fnt.draw(spriteBatch, Integer.toString(score), 400, 760);
+            } else {
+                fnt.draw(spriteBatch, Integer.toString(score), 380, 760);
+            }
+            if (currentColor == 0) {
+                spriteBatch.draw(yellowBar, 0, 790, 480, 10);
+                spriteBatch.draw(yellowBar, 0, 0, 480, 10);
+            } else if (currentColor == 1) {
+                spriteBatch.draw(greenBar, 0, 790, 480, 10);
+                spriteBatch.draw(greenBar, 0, 0, 480, 10);
+            } else if (currentColor == 2) {
+                spriteBatch.draw(blueBar, 0, 790, 480, 10);
+                spriteBatch.draw(blueBar, 0, 0, 480, 10);
+            } else {
+                spriteBatch.draw(redBar, 0, 790, 480, 10);
+                spriteBatch.draw(redBar, 0, 0, 480, 10);
+            }
+        }
+        spriteBatch.end();
+
+    }
+
+    @Override
+    public void dispose() {
+        fnt.dispose();
+        red.dispose();
+        blue.dispose();
+        green.dispose();
+        yellow.dispose();
+        userbtn.dispose();
+        mus.dispose();
+        gameover.dispose();
+        bg.dispose();
+        collect.dispose();
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        if (keycode == Input.Keys.BACK) {
+            if (DodgeIt.MUSICON == 1) {
+                mus.stop();
+            }
+            gameStateManager.set(new MenuState(gameStateManager));
+        }
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        FLAGtch = 2;
+        Strt = 1;
+        camera.unproject(touchpt.set(screenX, screenY, 0));
+        if (usrrctcnt == 0) {
+            usr = new Rectangle(touchpt.x, touchpt.y, 50, 50);
+            usrrctcnt = 1;
+        }
+        if (usrrctcnt == 1) {
+            usr.set(touchpt.x, touchpt.y, 50, 50);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        FLAGtch++;
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        camera.unproject(touchpt.set(screenX, screenY, 0));
+        if (usrrctcnt == 0) {
+            usr = new Rectangle(touchpt.x, touchpt.y, 50, 50);
+            usrrctcnt = 1;
+        }
+        if (usrrctcnt == 1) {
+            usr.set(touchpt.x, touchpt.y, 50, 50);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
+    }
+}

@@ -26,7 +26,7 @@ public class ballsHard {
             pos = new Vector2(0, 750);
             ac = new Vector2(rand.nextInt(5), -(rand.nextInt(5)));
             vel = new Vector2(0, 0);
-            rectangle = new Rectangle(pos.x,pos.y,50,50);
+            rectangle = new Rectangle(pos.x, pos.y, 100, 100);
         }
     }
 
@@ -72,7 +72,8 @@ public class ballsHard {
         if(pos.x<=0){pos.x=0;
         ac.x*=-1;
         vel.x=0;}
-        if (pos.x>=430){pos.x=430;
+        if (pos.x >= 380) {
+            pos.x = 380;
             ac.x*=-1;
             vel.x=0;}
         if (pos.y<=0){
@@ -80,10 +81,11 @@ public class ballsHard {
             ac.y*=-1;
             vel.y=0;
         }
-        if (pos.y>=750){pos.y=750;
+        if (pos.y >= 700) {
+            pos.y = 700;
             ac.y*=-1;
             vel.y=0;}
-        rectangle.set(pos.x,pos.y,50,50);
+        rectangle.set(pos.x, pos.y, 100, 100);
     }
     public Vector2 getPos() {
         return pos;

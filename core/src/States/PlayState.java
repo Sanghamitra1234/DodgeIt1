@@ -3,6 +3,8 @@ package States;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -31,7 +33,9 @@ public class PlayState extends state implements InputProcessor {
     private Vector3 touchpt;
     private Texture bg, userbtn, red, blue, green, yellow;
     private Rectangle usr;
+    public static Music mus;
     private Random random;
+    public static Sound gameover;
 
     PlayState(GameStateManager gameStateManager) {
         super(gameStateManager);
@@ -46,6 +50,12 @@ public class PlayState extends state implements InputProcessor {
         green = new Texture("green.png");
         touchpt = new Vector3();
         Gdx.input.setInputProcessor(this);
+        gameover = Gdx.audio.newSound(Gdx.files.internal("gameover.wav"));
+        if (DodgeIt.MUSICON == 1) {
+            mus = Gdx.audio.newMusic(Gdx.files.internal("mus.mp3"));
+            mus.play();
+            mus.setLooping(true);
+        }
         Gdx.input.setCatchBackKey(true);
         camera.setToOrtho(false, DodgeIt.WIDTH, DodgeIt.HIGHT);
     }
@@ -58,6 +68,8 @@ public class PlayState extends state implements InputProcessor {
     @Override
     public void update(float dt) {
         if (FLAGtch > 2) {
+            if (DodgeIt.SOUNDON == 1)
+                gameover.play();
             gameStateManager.set(new GameOver(gameStateManager, score, 0));
         }
         if (FLAGtch == 2) {
@@ -80,8 +92,11 @@ public class PlayState extends state implements InputProcessor {
                     bl.removeIndex(index);
                 }
                 if (bl2.getRectangle().overlaps(usr)) {
-                   if (score>DodgeIt.preferences.getInteger("HighScore")){DodgeIt.preferences.putInteger("HighScore",score);
-                   DodgeIt.preferences.flush();}
+                    if (DodgeIt.MUSICON == 1) {
+                        mus.stop();
+                    }
+                    if (DodgeIt.SOUNDON == 1)
+                        gameover.play();
                     gameStateManager.set(new GameOver(gameStateManager, score, 0));
                 }
                 index++;
@@ -115,7 +130,11 @@ public class PlayState extends state implements InputProcessor {
                     spriteBatch.draw(red, bl2.getPos().x, bl2.getPos().y, 50, 50);
                 }
             }
-            fnt.draw(spriteBatch, Integer.toString(score), 400, 760);
+            if (score < 1000) {
+                fnt.draw(spriteBatch, Integer.toString(score), 400, 760);
+            } else {
+                fnt.draw(spriteBatch, Integer.toString(score), 380, 760);
+            }
         }
         spriteBatch.end();
 
@@ -130,12 +149,17 @@ public class PlayState extends state implements InputProcessor {
         yellow.dispose();
         userbtn.dispose();
         bg.dispose();
+        mus.dispose();
+        gameover.dispose();
 
     }
 
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.BACK) {
+            if (DodgeIt.MUSICON == 1) {
+                mus.stop();
+            }
             gameStateManager.set(new MenuState(gameStateManager));
         }
         return false;

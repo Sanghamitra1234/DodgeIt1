@@ -3,18 +3,28 @@ package com.sleepygamers.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import States.GameStateManager;
-import States.SplashState;
+import States.MenuState;
 
 public class DodgeIt extends ApplicationAdapter {
     SpriteBatch batch;
     public static final int HIGHT = 800;
     public static final int WIDTH = 480;
     public static Preferences preferences;
+    public static int MUSICON = 1;
+    public static int SOUNDON = 1;
+    public static Music music;
     private GameStateManager gameStateManager;
+
+    public static PlayServices playServices;
+
+    public DodgeIt(PlayServices playServices) {
+        this.playServices = playServices;
+    }
 
     @Override
     public void create() {
@@ -29,9 +39,11 @@ public class DodgeIt extends ApplicationAdapter {
             preferences.putInteger("highScoreTime", 0);
         }
         preferences.flush();
+        music = Gdx.audio.newMusic(Gdx.files.internal("mus2.mp3"));
+        music.setLooping(true);
         batch = new SpriteBatch();
         gameStateManager = new GameStateManager();
-        gameStateManager.push(new SplashState(gameStateManager));
+        gameStateManager.push(new MenuState(gameStateManager, this));
 
         Gdx.gl.glClearColor(1, 1, 1, 1);
     }
