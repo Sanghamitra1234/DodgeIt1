@@ -14,7 +14,6 @@ import com.sleepygamers.game.DodgeIt;
  */
 
 public class MenuState extends state {
-    private Texture bg;
     public Sound mnu;
     private float startPlay = 0, startSett = 0, startCred = 0;
     private Vector3 touchpt;
@@ -33,9 +32,8 @@ public class MenuState extends state {
     public MenuState(GameStateManager gameStateManager) {
 
         super(gameStateManager);
-        bg = new Texture("bg6.jpg");
         playbtn = new Texture("play3.png");
-        mn = new BitmapFont(Gdx.files.internal("gmnm.fnt"));
+        mn = new BitmapFont(Gdx.files.internal("new.fnt"));
         highscoreicn = new Texture("highscore.png");
         settingicon = new Texture("settings.png");
         credits = new Texture("credits.png");
@@ -57,9 +55,8 @@ public class MenuState extends state {
 
         super(gameStateManager);
         this.game = game;
-        bg = new Texture("bg6.jpg");
         playbtn = new Texture("play3.png");
-        mn = new BitmapFont(Gdx.files.internal("gmnm.fnt"));
+        mn = new BitmapFont(Gdx.files.internal("new.fnt"));
         highscoreicn = new Texture("highscore.png");
         settingicon = new Texture("settings.png");
         credits = new Texture("credits.png");
@@ -111,15 +108,15 @@ public class MenuState extends state {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
+        Gdx.gl.glClearColor(0.8705f, 0.8745f, 0.8078f, 1);
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.setColor(1, 1, 1, 1);
         spriteBatch.begin();
-        spriteBatch.draw(bg, 0, 0, 480, 800);
-        spriteBatch.draw(playbtn, 90, 280, 300, 300);
-        spriteBatch.draw(highscoreicn, 52, 53, 80, 80);
-        spriteBatch.draw(credits, 190, 50, 100, 100);
-        spriteBatch.draw(settingicon, 339, 50, 90, 90);
-        mn.draw(spriteBatch, "DODGE IT", 65, 700);
+        spriteBatch.draw(playbtn, 90, 250, 300, 300);
+        spriteBatch.draw(highscoreicn, 62, 83, 80, 80);
+        spriteBatch.draw(credits, 190, 80, 100, 100);
+        spriteBatch.draw(settingicon, 339, 80, 90, 90);
+        mn.draw(spriteBatch, "Dodge It", 65, 700);
         spriteBatch.end();
     }
 

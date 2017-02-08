@@ -32,7 +32,7 @@ public class TimeAttackPlayState extends state implements InputProcessor {
     public int score = 0, time = 0;
     private int currentColor = 0;
     private Vector3 touchpt;
-    private Texture bg, userbtn, red, blue, green, yellow, yellowBar, greenBar, blueBar, redBar;
+    private Texture userbtn, red, blue, green, yellow, yellowBar, greenBar, blueBar, redBar;
     private Rectangle usr;
     private Random random;
     public static Music mus;
@@ -42,14 +42,13 @@ public class TimeAttackPlayState extends state implements InputProcessor {
     TimeAttackPlayState(GameStateManager gameStateManager) {
         super(gameStateManager);
         random = new Random();
-        bg = new Texture("bg7.jpg");
         userbtn = new Texture("userbtn.jpg");
         red = new Texture("red.png");
         blue = new Texture("blue.png");
         redBar = new Texture("redBar.png");
         blueBar = new Texture("blueBar.png");
         bl = new Array<balls>();
-        fnt = new BitmapFont(Gdx.files.internal("ourfont.fnt"));
+        fnt = new BitmapFont(Gdx.files.internal("new1.fnt"));
         yellow = new Texture("yellow.png");
         green = new Texture("green.png");
         yellowBar = new Texture("yellowBar.png");
@@ -137,12 +136,12 @@ public class TimeAttackPlayState extends state implements InputProcessor {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
+        Gdx.gl.glClearColor(0.1294f, 0.1254f, 0.1607f, 1);
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
         spriteBatch.setColor(1, 1, 1, 1);
-        spriteBatch.draw(bg, 0, 0, 480, 800);
         if (Strt == 0) {
-            fnt.draw(spriteBatch, "HOLD TO PLAY", 80, 500);
+            fnt.draw(spriteBatch, "HOLD TO PLAY", 40, 500);
         }
         if (FLAGtch == 2) {
             spriteBatch.draw(userbtn, touchpt.x, touchpt.y, 50, 50);
@@ -161,11 +160,20 @@ public class TimeAttackPlayState extends state implements InputProcessor {
                 }
             }
             fnt.draw(spriteBatch, "0:" + Integer.toString(time), 10, 760);
+
             if (score < 1000) {
-                fnt.draw(spriteBatch, Integer.toString(score), 400, 760);
-            } else {
-                fnt.draw(spriteBatch, Integer.toString(score), 380, 760);
-            }
+                if (score < 100) {
+                    if (score < 10) {
+                        fnt.draw(spriteBatch, Integer.toString(score), 430, 760);
+                    } else {
+                        fnt.draw(spriteBatch, Integer.toString(score), 410, 760);
+                    }
+                } else {
+                    fnt.draw(spriteBatch, Integer.toString(score), 390, 760);
+                }
+            } else
+                fnt.draw(spriteBatch, Integer.toString(score), 370, 760);
+
             if (currentColor == 0) {
                 spriteBatch.draw(yellowBar, 0, 790, 480, 10);
                 spriteBatch.draw(yellowBar, 0, 0, 480, 10);
@@ -194,7 +202,6 @@ public class TimeAttackPlayState extends state implements InputProcessor {
         userbtn.dispose();
         mus.dispose();
         gameover.dispose();
-        bg.dispose();
         collect.dispose();
     }
 

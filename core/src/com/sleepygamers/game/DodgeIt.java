@@ -45,7 +45,7 @@ public class DodgeIt extends ApplicationAdapter {
         gameStateManager = new GameStateManager();
         gameStateManager.push(new MenuState(gameStateManager, this));
 
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClearColor(0.8705f, 0.8745f, 0.8078f, 1);
     }
 
     @Override

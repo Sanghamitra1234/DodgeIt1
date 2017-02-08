@@ -36,7 +36,7 @@ public class HardPlayState extends state implements InputProcessor {
     public float TimePassed = 0, tm = 0;
     public int score = 0, scoreDelay = 0;
     private static Vector3 touchpt;
-    private Texture bg, userbtn, hardBall;
+    private Texture userbtn, hardBall;
     private TextureAtlas hrdbl;
     private Animation animation;
     private static Rectangle usr;
@@ -49,13 +49,12 @@ public class HardPlayState extends state implements InputProcessor {
     HardPlayState(GameStateManager gameStateManager) {
         super(gameStateManager);
         random = new Random();
-        bg = new Texture("bg2.png");
         userbtn = new Texture("userbtn.jpg");
         hrdbl = new TextureAtlas(Gdx.files.internal("bl.atlas"));
         animation = new Animation(1 / 10f, hrdbl.getRegions());
         bl = new Array<ballsHard>();
         hardBall = new Texture("userbtn.jpg");
-        fnt = new BitmapFont(Gdx.files.internal("ourfont.fnt"));
+        fnt = new BitmapFont(Gdx.files.internal("new1.fnt"));
         touchpt = new Vector3();
         firstball = 0;
         gameover = Gdx.audio.newSound(Gdx.files.internal("gameover.wav"));
@@ -108,11 +107,11 @@ public class HardPlayState extends state implements InputProcessor {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
+        Gdx.gl.glClearColor(0.1294f, 0.1254f, 0.1607f, 1);
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
-        spriteBatch.draw(bg, 0, 0, 480, 800);
         if (Strt == 0) {
-            fnt.draw(spriteBatch, "HOLD TO PLAY", 80, 500);
+            fnt.draw(spriteBatch, "HOLD TO PLAY", 40, 500);
         }
         if (FLAGtch == 2) {
             spriteBatch.draw(userbtn, touchpt.x, touchpt.y, 50, 50);
@@ -120,13 +119,21 @@ public class HardPlayState extends state implements InputProcessor {
                 // spriteBatch.draw(hardBall, bl2.getPos().x, bl2.getPos().y, 50, 50);
                 spriteBatch.draw((TextureRegion) animation.getKeyFrame(TimePassed, true), bl2.getPos().x, bl2.getPos().y, 100, 100);
             }
+
             if (score < 1000) {
-                fnt.draw(spriteBatch, Integer.toString(score), 400, 760);
-            } else {
-                fnt.draw(spriteBatch, Integer.toString(score), 380, 760);
-            }
+                if (score < 100) {
+                    if (score < 10) {
+                        fnt.draw(spriteBatch, Integer.toString(score), 430, 760);
+                    } else {
+                        fnt.draw(spriteBatch, Integer.toString(score), 410, 760);
+                    }
+                } else {
+                    fnt.draw(spriteBatch, Integer.toString(score), 390, 760);
+                }
+            } else
+                fnt.draw(spriteBatch, Integer.toString(score), 370, 760);
+
         }
-        fnt.draw(spriteBatch, Integer.toString(score), 400, 760);
         spriteBatch.end();
 
     }
@@ -135,7 +142,6 @@ public class HardPlayState extends state implements InputProcessor {
     public void dispose() {
         fnt.dispose();
         userbtn.dispose();
-        bg.dispose();
         gameover.dispose();
         hrdbl.dispose();
         hardBall.dispose();

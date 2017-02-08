@@ -31,7 +31,6 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
         };
 
         gameHelper.setup(gameHelperListener);
-
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         initialize(new DodgeIt(this), config);
     }

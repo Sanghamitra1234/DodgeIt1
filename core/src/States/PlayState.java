@@ -31,7 +31,7 @@ public class PlayState extends state implements InputProcessor {
     public float TimePassed = 0;
     public int score = 0;
     private Vector3 touchpt;
-    private Texture bg, userbtn, red, blue, green, yellow;
+    private Texture userbtn, red, blue, green, yellow;
     private Rectangle usr;
     public static Music mus;
     private Random random;
@@ -40,12 +40,11 @@ public class PlayState extends state implements InputProcessor {
     PlayState(GameStateManager gameStateManager) {
         super(gameStateManager);
         random = new Random();
-        bg = new Texture("blackbg.png");
         userbtn = new Texture("userbtn.jpg");
         red = new Texture("red.png");
         blue = new Texture("blue.png");
         bl = new Array<balls>();
-        fnt = new BitmapFont(Gdx.files.internal("ourfont.fnt"));
+        fnt = new BitmapFont(Gdx.files.internal("new1.fnt"));
         yellow = new Texture("yellow.png");
         green = new Texture("green.png");
         touchpt = new Vector3();
@@ -106,12 +105,11 @@ public class PlayState extends state implements InputProcessor {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
+        Gdx.gl.glClearColor(0.1294f, 0.1254f, 0.1607f, 1);
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
-        spriteBatch.setColor(1, 1, 1, 1);
-        spriteBatch.draw(bg, 0, 0, 480, 800);
         if (Strt == 0) {
-            fnt.draw(spriteBatch, "HOLD TO PLAY", 80, 500);
+            fnt.draw(spriteBatch, "HOLD TO PLAY", 40, 500);
             //spriteBatch.draw(userbtn,100,400,50,50);
         }
         if (FLAGtch == 2) {
@@ -131,10 +129,18 @@ public class PlayState extends state implements InputProcessor {
                 }
             }
             if (score < 1000) {
-                fnt.draw(spriteBatch, Integer.toString(score), 400, 760);
-            } else {
-                fnt.draw(spriteBatch, Integer.toString(score), 380, 760);
-            }
+                if (score < 100) {
+                    if (score < 10) {
+                        fnt.draw(spriteBatch, Integer.toString(score), 430, 760);
+                    } else {
+                        fnt.draw(spriteBatch, Integer.toString(score), 410, 760);
+                    }
+                } else {
+                    fnt.draw(spriteBatch, Integer.toString(score), 390, 760);
+                }
+            } else
+                fnt.draw(spriteBatch, Integer.toString(score), 370, 760);
+
         }
         spriteBatch.end();
 
@@ -148,7 +154,6 @@ public class PlayState extends state implements InputProcessor {
         green.dispose();
         yellow.dispose();
         userbtn.dispose();
-        bg.dispose();
         mus.dispose();
         gameover.dispose();
 
