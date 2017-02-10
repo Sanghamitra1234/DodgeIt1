@@ -98,6 +98,7 @@ public class GameOver extends state implements InputProcessor {
             fnt1.draw(spriteBatch, "High Score", 110, 400);
             DodgeIt.preferences.putInteger("HighScore", score1);
             DodgeIt.preferences.flush();
+            MenuState.game.playServices.submitScore(score1);
         }
         if (gamee != 1 && gamee != 0 && (score1 >= DodgeIt.preferences.getInteger("HighScoreTime"))) {
             fnt1.draw(spriteBatch, "High Score", 110, 400);

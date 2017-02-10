@@ -24,6 +24,7 @@ public class HighscoreState extends state implements InputProcessor {
         bg = new Texture("HighScoreS.png");
         fnt = new BitmapFont(Gdx.files.internal("cour.fnt"));
         camera.setToOrtho(false, DodgeIt.WIDTH, DodgeIt.HIGHT);
+        MenuState.game.playServices.submitScore(DodgeIt.preferences.getInteger("HighScore"));
     }
 
     @Override

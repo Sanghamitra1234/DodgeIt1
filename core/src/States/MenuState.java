@@ -7,7 +7,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.sleepygamers.game.DodgeIt;
+
+import java.util.Random;
 
 /**
  * Created by Akash on 30-01-2017.
@@ -19,21 +22,32 @@ public class MenuState extends state {
     private Vector3 touchpt;
     private BitmapFont mn;
     private int startHigh = 0;
+    private int index = 0;
     private Texture playbtn;
     private Texture credits;
+    private int strt = 1;
     private Rectangle credits1;
     private float alpha = 1;
     private Rectangle playbtn1;
+    private Texture red, blue, green, yellow;
     private Texture highscoreicn;
     private Rectangle high;
     private Texture settingicon;
     private Rectangle sett;
+    private Array<MenuBalls> bl;
+    private Random random;
     public static DodgeIt game;
+
     public MenuState(GameStateManager gameStateManager) {
 
         super(gameStateManager);
         playbtn = new Texture("play3.png");
         mn = new BitmapFont(Gdx.files.internal("new.fnt"));
+        red = new Texture("red.png");
+        yellow = new Texture("yellow.png");
+        green = new Texture("green.png");
+        blue = new Texture("blue.png");
+        bl = new Array<MenuBalls>();
         highscoreicn = new Texture("highscore.png");
         settingicon = new Texture("settings.png");
         credits = new Texture("credits.png");
@@ -42,6 +56,7 @@ public class MenuState extends state {
         if (DodgeIt.MUSICON == 1) {
             DodgeIt.music.play();
         }
+        random = new Random();
         sett = new Rectangle(330, 50, 90, 90);
         camera.setToOrtho(false, DodgeIt.WIDTH, DodgeIt.HIGHT);
         touchpt = new Vector3();
@@ -61,10 +76,17 @@ public class MenuState extends state {
         settingicon = new Texture("settings.png");
         credits = new Texture("credits.png");
         credits1 = new Rectangle(190, 50, 100, 100);
+        random = new Random();
+        bl = new Array<MenuBalls>();
+        red = new Texture("red.png");
+        yellow = new Texture("yellow.png");
+        green = new Texture("green.png");
+        blue = new Texture("blue.png");
         high = new Rectangle(50, 50, 100, 100);
         if (DodgeIt.MUSICON == 1) {
             DodgeIt.music.play();
         }
+        random = new Random();
         sett = new Rectangle(330, 50, 90, 90);
         camera.setToOrtho(false, DodgeIt.WIDTH, DodgeIt.HIGHT);
         touchpt = new Vector3();
@@ -95,15 +117,31 @@ public class MenuState extends state {
             if (OverlapTester.pointInRectangle(credits1, touchpt.x, touchpt.y)) {
                 if (DodgeIt.SOUNDON == 1)
                     mnu.play();
-                gameStateManager.set(new CreditsState(gameStateManager));
+                game.playServices.showScore();
             }
         }
     }
 
     @Override
     public void update(float dt) {
+        if (strt < 6) {
+            bl.add(new MenuBalls());
+            strt++;
+        }
+        if (random.nextInt(20) == 1) {
+            bl.add(new MenuBalls());
+        }
+        index = 0;
+        for (MenuBalls b1 : bl) {
+            b1.updatePos();
+            if (b1.getPos().x > 480 || b1.pos.y > 800 || b1.getPos().x < 0 || b1.getPos().y < 0) {
+                if (index > 2) {
+                    bl.removeIndex(index);
+                }
+            }
+            index++;
+        }
         handleInput();
-
     }
 
     @Override
@@ -112,6 +150,20 @@ public class MenuState extends state {
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.setColor(1, 1, 1, 1);
         spriteBatch.begin();
+        for (MenuBalls bl2 : bl) {
+            if (bl2.getClr() == 0) {
+                spriteBatch.draw(yellow, bl2.getPos().x, bl2.getPos().y, 50, 50);
+            }
+            if (bl2.getClr() == 1) {
+                spriteBatch.draw(green, bl2.getPos().x, bl2.getPos().y, 50, 50);
+            }
+            if (bl2.getClr() == 2) {
+                spriteBatch.draw(blue, bl2.getPos().x, bl2.getPos().y, 50, 50);
+            }
+            if (bl2.getClr() == 3) {
+                spriteBatch.draw(red, bl2.getPos().x, bl2.getPos().y, 50, 50);
+            }
+        }
         spriteBatch.draw(playbtn, 90, 250, 300, 300);
         spriteBatch.draw(highscoreicn, 62, 83, 80, 80);
         spriteBatch.draw(credits, 190, 80, 100, 100);

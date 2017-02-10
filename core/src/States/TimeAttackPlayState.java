@@ -83,7 +83,7 @@ public class TimeAttackPlayState extends state implements InputProcessor {
         if (FLAGtch == 2) {
             TimePassed += Gdx.graphics.getDeltaTime();
             timeDelay += Gdx.graphics.getDeltaTime();
-            time = (int) (60 - TimePassed);
+            time = (int) (120 - TimePassed);
             if (random.nextInt(50) == 1) {
                 if (timeDelay > 5) {
                     currentColor = random.nextInt(4);
@@ -159,7 +159,7 @@ public class TimeAttackPlayState extends state implements InputProcessor {
                     spriteBatch.draw(red, bl2.getPos().x, bl2.getPos().y, 50, 50);
                 }
             }
-            fnt.draw(spriteBatch, "0:" + Integer.toString(time), 10, 760);
+            fnt.draw(spriteBatch, " " + Integer.toString(time), 10, 760);
 
             if (score < 1000) {
                 if (score < 100) {

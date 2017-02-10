@@ -51,7 +51,7 @@ public class HardPlayState extends state implements InputProcessor {
         random = new Random();
         userbtn = new Texture("userbtn.jpg");
         hrdbl = new TextureAtlas(Gdx.files.internal("bl.atlas"));
-        animation = new Animation(1 / 10f, hrdbl.getRegions());
+        animation = new Animation(1 / 20f, hrdbl.getRegions());
         bl = new Array<ballsHard>();
         hardBall = new Texture("userbtn.jpg");
         fnt = new BitmapFont(Gdx.files.internal("new1.fnt"));
@@ -107,7 +107,7 @@ public class HardPlayState extends state implements InputProcessor {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
-        Gdx.gl.glClearColor(0.1294f, 0.1254f, 0.1607f, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
         if (Strt == 0) {
