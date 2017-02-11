@@ -17,20 +17,24 @@ import com.sleepygamers.game.DodgeIt;
 public class SettingsState extends state implements InputProcessor {
     int flag = 0;
     private BitmapFont fnt;
-    private Texture bg;
     private Vector3 touchpt;
-    private Rectangle soun, musi, rese;
+    private Texture wb, bb, pp, yb;
+    private Rectangle soun, musi, rese, achi;
 
     SettingsState(GameStateManager gameStateManager) {
         super(gameStateManager);
         Gdx.input.setInputProcessor(this);
         Gdx.input.setCatchBackKey(true);
-        bg = new Texture("SettingsState.png");
-        fnt = new BitmapFont(Gdx.files.internal("cour.fnt"));
+        fnt = new BitmapFont(Gdx.files.internal("new.fnt"));
         camera.setToOrtho(false, 480, 800);
-        musi = new Rectangle(300, 570, 80, 40);
-        soun = new Rectangle(300, 490, 80, 40);
-        rese = new Rectangle(300, 395, 80, 40);
+        musi = new Rectangle(30, 563, 240, 50);
+        soun = new Rectangle(30, 467, 240, 50);
+        bb = new Texture("blackball.png");
+        wb = new Texture("whiteball.png");
+        pp = new Texture("playyy.png");
+        yb = new Texture("yellowBar.png");
+        achi = new Rectangle(30, 371, 450, 50);
+        rese = new Rectangle(30, 275, 430, 50);
         touchpt = new Vector3(0, 0, 0);
     }
 
@@ -47,6 +51,9 @@ public class SettingsState extends state implements InputProcessor {
                     DodgeIt.MUSICON = 1;
                     DodgeIt.music.play();
                 }
+            }
+            if (OverlapTester.pointInRectangle(achi, touchpt.x, touchpt.y)) {
+                DodgeIt.playServices.showAchievement();
             }
             if (OverlapTester.pointInRectangle(soun, touchpt.x, touchpt.y)) {
                 if (DodgeIt.SOUNDON == 1) {
@@ -74,22 +81,29 @@ public class SettingsState extends state implements InputProcessor {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
+        Gdx.gl.glClearColor(222 / 255f, 174 / 255f, 49 / 255f, 1);
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
-        spriteBatch.draw(bg, 0, 0, 480, 800);
+        fnt.getData().setScale(1f);
+        fnt.draw(spriteBatch, "SETTINGS", 35, 750);
+        spriteBatch.draw(yb, 30, 670, 420, 5);
+        fnt.getData().setScale(0.75f);
+        fnt.draw(spriteBatch, "Music", 100, 605);
+        fnt.draw(spriteBatch, "Sound", 100, 509);
+        fnt.draw(spriteBatch, "Achievement", 100, 413);
+        fnt.draw(spriteBatch, "Reset Score", 100, 317);
+        spriteBatch.draw(wb, 30, 563, 50, 50);
+        spriteBatch.draw(wb, 30, 467, 50, 50);
+        spriteBatch.draw(pp, 30, 371, 50, 50);
+        spriteBatch.draw(pp, 30, 275, 50, 50);
         if (DodgeIt.MUSICON == 1) {
-            fnt.draw(spriteBatch, "ON", 310, 605);
-        } else {
-            fnt.draw(spriteBatch, "OFF", 300, 605);
+            spriteBatch.draw(bb, 40, 573, 30, 30);
         }
-        if (DodgeIt.SOUNDON == 1)
-            fnt.draw(spriteBatch, "ON", 310, 509);
-        else
-            fnt.draw(spriteBatch, "OFF", 300, 509);
+        if (DodgeIt.SOUNDON == 1) {
+            spriteBatch.draw(bb, 40, 477, 30, 30);
+        }
         if (flag == 1) {
-            fnt.draw(spriteBatch, "OK", 308, 413);
-        } else {
-            fnt.draw(spriteBatch, " ", 308, 413);
+            fnt.draw(spriteBatch, "Done", 290, 230);
         }
         spriteBatch.end();
 
@@ -98,7 +112,6 @@ public class SettingsState extends state implements InputProcessor {
     @Override
     public void dispose() {
         fnt.dispose();
-        bg.dispose();
     }
 
     @Override

@@ -14,32 +14,29 @@ import com.sleepygamers.game.DodgeIt;
  */
 
 public class GameOver extends state implements InputProcessor {
-    private Texture bg, chalkBoard, home, replay;
+    private Texture home, replay, bl;
     private Vector3 touchpt;
     private Rectangle homeRec, replayRec;
     public static int score1;
-    private int gamee;
+    private int gamee, ypt = -620;
     private BitmapFont fnt, fnt1;
 
     GameOver(GameStateManager gameStateManager, int score, int gme) {
         super(gameStateManager);
-        bg = new Texture("blackbg.png");
         score1 = score;
         gamee = gme;
         Gdx.input.setInputProcessor(this);
         Gdx.input.setCatchBackKey(false);
-        chalkBoard = new Texture("chalkboard.jpg");
         home = new Texture("home.png");
-        homeRec = new Rectangle(120, 200, 70, 70);
-        replayRec = new Rectangle(300, 200, 70, 70);
-
         touchpt = new Vector3();
+        bl = new Texture("blueBar.png");
         replay = new Texture("replay.png");
-        fnt = new BitmapFont(Gdx.files.internal("gmnm.fnt"));
-        fnt1 = new BitmapFont(Gdx.files.internal("cour.fnt"));
+        fnt = new BitmapFont(Gdx.files.internal("new2.fnt"));
+        fnt1 = new BitmapFont(Gdx.files.internal("new1.fnt"));
         camera.setToOrtho(false, DodgeIt.WIDTH, DodgeIt.HIGHT);
-        homeRec = new Rectangle(120, 200, 70, 70);
-        replayRec = new Rectangle(300, 200, 70, 70);
+
+        homeRec = new Rectangle(110, 75, 95, 95);
+        replayRec = new Rectangle(290, 70, 100, 100);
     }
 
     @Override
@@ -61,12 +58,24 @@ public class GameOver extends state implements InputProcessor {
             if (OverlapTester.pointInRectangle(replayRec, touchpt.x, touchpt.y)) {
                 if (gamee == 0) {
                     PlayState.mus.stop();
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                    }
                     gameStateManager.set(new PlayState(gameStateManager));
                 } else if (gamee == 1) {
                     HardPlayState.mus.stop();
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                    }
                     gameStateManager.set(new HardPlayState(gameStateManager));
                 } else {
                     TimeAttackPlayState.mus.stop();
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                    }
                     gameStateManager.set(new TimeAttackPlayState(gameStateManager));
                 }
             }
@@ -75,6 +84,7 @@ public class GameOver extends state implements InputProcessor {
 
     @Override
     public void update(float dt) {
+        if (ypt <= 180) ypt += 60;
         handleInput();
     }
 
@@ -82,33 +92,43 @@ public class GameOver extends state implements InputProcessor {
     public void render(SpriteBatch spriteBatch) {
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
-        spriteBatch.draw(bg, 0, 0, 480, 800);
-        spriteBatch.draw(chalkBoard, 80, 300, 320, 400);
-        spriteBatch.draw(home, 120, 200, 70, 70);
-        spriteBatch.draw(replay, 300, 200, 80, 80);
-        fnt.draw(spriteBatch, "SCORE:", 120, 660);
-        if (score1 < 100) {
-            fnt.draw(spriteBatch, Integer.toString(score1), 200, 570);
-        } else if (score1 < 1000) {
-            fnt.draw(spriteBatch, Integer.toString(score1), 180, 570);
-        } else {
-            fnt.draw(spriteBatch, Integer.toString(score1), 160, 570);
-        }
-        if (gamee == 0 && (score1 >= DodgeIt.preferences.getInteger("HighScore"))) {
-            fnt1.draw(spriteBatch, "High Score", 110, 400);
-            DodgeIt.preferences.putInteger("HighScore", score1);
-            DodgeIt.preferences.flush();
-            MenuState.game.playServices.submitScore(score1);
-        }
-        if (gamee != 1 && gamee != 0 && (score1 >= DodgeIt.preferences.getInteger("HighScoreTime"))) {
-            fnt1.draw(spriteBatch, "High Score", 110, 400);
-            DodgeIt.preferences.putInteger("HighScoreTime", score1);
-            DodgeIt.preferences.flush();
-        }
-        if (gamee == 1 && (score1 >= DodgeIt.preferences.getInteger("HighScoreHard"))) {
-            fnt1.draw(spriteBatch, "High Score", 110, 400);
-            DodgeIt.preferences.putInteger("HighScoreHard", score1);
-            DodgeIt.preferences.flush();
+        spriteBatch.draw(bl, 0, ypt, 480, 620);
+        if (ypt >= 180) {
+            spriteBatch.draw(home, 110, 75, 95, 95);
+            spriteBatch.draw(replay, 290, 70, 100, 100);
+            fnt.draw(spriteBatch, "SCORE", 120, 660);
+
+            if (score1 < 10) {
+                fnt.draw(spriteBatch, Integer.toString(score1), 230, 570);
+            } else if (score1 < 100) {
+                fnt.draw(spriteBatch, Integer.toString(score1), 210, 570);
+            } else if (score1 < 1000) {
+                fnt.draw(spriteBatch, Integer.toString(score1), 190, 570);
+            } else {
+                fnt.draw(spriteBatch, Integer.toString(score1), 170, 570);
+            }
+            if (gamee == 0 && (score1 >= DodgeIt.preferences.getInteger("HighScore"))) {
+                fnt1.draw(spriteBatch, "High Score", 120, 400);
+                DodgeIt.preferences.putInteger("HighScore", score1);
+                DodgeIt.preferences.flush();
+                DodgeIt.chk5 = 1;
+                MenuState.game.playServices.submitScore(score1);
+            }
+            if (gamee != 1 && gamee != 0 && (score1 >= DodgeIt.preferences.getInteger("HighScoreTime"))) {
+                fnt1.draw(spriteBatch, "High Score", 110, 400);
+                DodgeIt.preferences.putInteger("HighScoreTime", score1);
+                DodgeIt.preferences.flush();
+                DodgeIt.chk5 = 2;
+                MenuState.game.playServices.submitScore(score1);
+            }
+            if (gamee == 1 && (score1 >= DodgeIt.preferences.getInteger("HighScoreHard"))) {
+                fnt1.draw(spriteBatch, "High Score", 110, 400);
+                DodgeIt.preferences.putInteger("HighScoreHard", score1);
+                DodgeIt.preferences.flush();
+                DodgeIt.chk5 = 3;
+                MenuState.game.playServices.submitScore(score1);
+
+            }
         }
         spriteBatch.end();
 
@@ -118,10 +138,11 @@ public class GameOver extends state implements InputProcessor {
     public void dispose() {
         fnt.dispose();
         fnt1.dispose();
-        bg.dispose();
-        chalkBoard.dispose();
+        PlayState.mus.dispose();
+        TimeAttackPlayState.mus.dispose();
         home.dispose();
         replay.dispose();
+        HardPlayState.mus.dispose();
 
     }
 

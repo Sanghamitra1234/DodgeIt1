@@ -15,6 +15,8 @@ import com.sleepygamers.game.DodgeIt;
 
 import java.util.Random;
 
+import static com.sleepygamers.game.DodgeIt.ggg;
+
 /**
  * Created by Akash on 30-01-2017.
  */
@@ -69,11 +71,28 @@ public class PlayState extends state implements InputProcessor {
         if (FLAGtch > 2) {
             if (DodgeIt.SOUNDON == 1)
                 gameover.play();
-            gameStateManager.set(new GameOver(gameStateManager, score, 0));
+            gameStateManager.push(new GameOver(gameStateManager, score, 0));
         }
         if (FLAGtch == 2) {
             TimePassed += Gdx.graphics.getDeltaTime();
             score = (int) (TimePassed * 5);
+            if (score >= 1000) {
+                ggg = 5;
+                MenuState.game.playServices.unlockAchievement();
+            } else if (score >= 500) {
+                ggg = 4;
+                MenuState.game.playServices.unlockAchievement();
+            } else if (score >= 300) {
+                ggg = 3;
+                MenuState.game.playServices.unlockAchievement();
+            } else if (score >= 100) {
+                ggg = 2;
+                MenuState.game.playServices.unlockAchievement();
+            } else if (score >= 50) {
+                ggg = 1;
+                MenuState.game.playServices.unlockAchievement();
+            }
+
             newballcnt++;
 
 
@@ -101,6 +120,7 @@ public class PlayState extends state implements InputProcessor {
                 index++;
             }
         }
+
     }
 
     @Override
@@ -154,7 +174,6 @@ public class PlayState extends state implements InputProcessor {
         green.dispose();
         yellow.dispose();
         userbtn.dispose();
-        mus.dispose();
         gameover.dispose();
 
     }

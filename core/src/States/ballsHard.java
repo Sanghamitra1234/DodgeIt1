@@ -14,7 +14,7 @@ public class ballsHard {
     public Rectangle rectangle,Big1;
     public Vector2 pos;
     public Vector2 ac;
-    private float Timepassed1 = 0;
+    private float Timepassed1 = 0, tp2 = 0;
     private int xval,yval;
     public Vector2 vel;
     private Random rand;
@@ -35,6 +35,7 @@ public class ballsHard {
     }
 
     public void updatePos() {
+        tp2 += Gdx.graphics.getDeltaTime();
         int ylow = (int) (pos.y) - 240;
         int yhigh = (int) (pos.y + 290);
         if (ylow <= 0) {

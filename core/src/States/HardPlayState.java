@@ -18,6 +18,8 @@ import com.sleepygamers.game.DodgeIt;
 
 import java.util.Random;
 
+import static com.sleepygamers.game.DodgeIt.ggg;
+
 /**
  * Created by Akash on 30-01-2017.
  */
@@ -82,11 +84,27 @@ public class HardPlayState extends state implements InputProcessor {
         if (FLAGtch > 2) {
             if (DodgeIt.SOUNDON == 1)
                 gameover.play();
-            gameStateManager.set(new GameOver(gameStateManager, score, 1));
+            gameStateManager.push(new GameOver(gameStateManager, score, 1));
         }
         if (FLAGtch == 2) {
             TimePassed += Gdx.graphics.getDeltaTime();
             score = (int) (TimePassed * 5);
+            if (score >= 1500) {
+                ggg = 15;
+                MenuState.game.playServices.unlockAchievement();
+            } else if (score >= 800) {
+                ggg = 14;
+                MenuState.game.playServices.unlockAchievement();
+            } else if (score >= 500) {
+                ggg = 13;
+                MenuState.game.playServices.unlockAchievement();
+            } else if (score >= 100) {
+                ggg = 12;
+                MenuState.game.playServices.unlockAchievement();
+            } else if (score >= 50) {
+                ggg = 11;
+                MenuState.game.playServices.unlockAchievement();
+            }
             if (firstball == 0) {
                 bl.add(new ballsHard());
                 firstball = 1;
@@ -145,7 +163,6 @@ public class HardPlayState extends state implements InputProcessor {
         gameover.dispose();
         hrdbl.dispose();
         hardBall.dispose();
-        mus.dispose();
 
     }
 

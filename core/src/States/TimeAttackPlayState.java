@@ -15,6 +15,8 @@ import com.sleepygamers.game.DodgeIt;
 
 import java.util.Random;
 
+import static com.sleepygamers.game.DodgeIt.ggg;
+
 /**
  * Created by Akash on 30-01-2017.
  */
@@ -78,7 +80,7 @@ public class TimeAttackPlayState extends state implements InputProcessor {
         if (FLAGtch > 2) {
             if (DodgeIt.SOUNDON == 1)
                 gameover.play();
-            gameStateManager.set(new GameOver(gameStateManager, score, 3));
+            gameStateManager.push(new GameOver(gameStateManager, score, 3));
         }
         if (FLAGtch == 2) {
             TimePassed += Gdx.graphics.getDeltaTime();
@@ -96,7 +98,7 @@ public class TimeAttackPlayState extends state implements InputProcessor {
                 }
                 if (DodgeIt.SOUNDON == 1)
                     gameover.play();
-                gameStateManager.set(new GameOver(gameStateManager, score, 3));
+                gameStateManager.push(new GameOver(gameStateManager, score, 3));
             }
             newballcnt++;
 
@@ -116,6 +118,22 @@ public class TimeAttackPlayState extends state implements InputProcessor {
                 if (bl2.getRectangle().overlaps(usr)) {
                     if (currentColor == bl2.getClr()) {
                         score += 10;
+                        if (score >= 400) {
+                            ggg = 10;
+                            MenuState.game.playServices.unlockAchievement();
+                        } else if (score >= 200) {
+                            ggg = 9;
+                            MenuState.game.playServices.unlockAchievement();
+                        } else if (score >= 150) {
+                            ggg = 8;
+                            MenuState.game.playServices.unlockAchievement();
+                        } else if (score >= 100) {
+                            ggg = 7;
+                            MenuState.game.playServices.unlockAchievement();
+                        } else if (score >= 50) {
+                            ggg = 6;
+                            MenuState.game.playServices.unlockAchievement();
+                        }
                         if (DodgeIt.SOUNDON == 1) {
                             collect.play();
                         }
@@ -200,7 +218,6 @@ public class TimeAttackPlayState extends state implements InputProcessor {
         green.dispose();
         yellow.dispose();
         userbtn.dispose();
-        mus.dispose();
         gameover.dispose();
         collect.dispose();
     }

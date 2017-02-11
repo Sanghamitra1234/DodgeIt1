@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import States.GameStateManager;
-import States.MenuState;
+import States.SplashState;
 
 public class DodgeIt extends ApplicationAdapter {
     SpriteBatch batch;
@@ -17,6 +17,8 @@ public class DodgeIt extends ApplicationAdapter {
     public static Preferences preferences;
     public static int MUSICON = 1;
     public static int SOUNDON = 1;
+    public static int ggg = 0;
+    public static int chk5 = 0;
     public static Music music;
     private GameStateManager gameStateManager;
 
@@ -43,7 +45,7 @@ public class DodgeIt extends ApplicationAdapter {
         music.setLooping(true);
         batch = new SpriteBatch();
         gameStateManager = new GameStateManager();
-        gameStateManager.push(new MenuState(gameStateManager, this));
+        gameStateManager.push(new SplashState(gameStateManager, this));
 
         Gdx.gl.glClearColor(0.8705f, 0.8745f, 0.8078f, 1);
     }
