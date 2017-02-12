@@ -86,6 +86,10 @@ public class HighscoreState extends state implements InputProcessor {
     @Override
     public void dispose() {
         fnt.dispose();
+        yb.dispose();
+        cl.dispose();
+        hard.dispose();
+        time.dispose();
     }
 
     @Override

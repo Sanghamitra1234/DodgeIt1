@@ -9,12 +9,11 @@ buildscript {
         classpath 'com.android.tools.build:gradle:2.2.3'
     }
 }
-
 allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
 
-    version = '2.0'
+    version = '3.1'
     ext {
         appName = "DodgeIt"
         gdxVersion = '1.9.5'
@@ -49,10 +48,11 @@ project(":android") {
 
     configurations { natives }
 
+
     dependencies {
         compile project(":core")
 
-        compile 'com.google.android.gms:play-services-games:8.4.0'
+        compile('com.google.android.gms:play-services-games:8.4.0')
         compile project(':BaseGameUtils')
         compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"

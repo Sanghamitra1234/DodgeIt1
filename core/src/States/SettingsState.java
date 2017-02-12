@@ -112,6 +112,10 @@ public class SettingsState extends state implements InputProcessor {
     @Override
     public void dispose() {
         fnt.dispose();
+        wb.dispose();
+        pp.dispose();
+        yb.dispose();
+        bb.dispose();
     }
 
     @Override

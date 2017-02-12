@@ -1,7 +1,8 @@
 android {
 
-    buildToolsVersion "25.0.2"
-    compileSdkVersion 25
+
+    buildToolsVersion '23.0.1'
+    compileSdkVersion 23
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -15,13 +16,17 @@ android {
 
         instrumentTest.setRoot('tests')
     }
+    configurations {
+        all*.exclude group: 'com.android.support', module: 'support-core-utils-25.1.1'
+    }
     packagingOptions {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.sleepygamers.game"
         minSdkVersion 9
-        targetSdkVersion 25
+        targetSdkVersion 23
     }
 }
 // called every time gradle gets executed, takes the native dependencies of
@@ -124,6 +129,5 @@ idea {
     }
 }
 dependencies {
-
-    compile project(path: ':BaseGameUtils')
+    compile 'com.android.support:multidex:1.0.0'
 }

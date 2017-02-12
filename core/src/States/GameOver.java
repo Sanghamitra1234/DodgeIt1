@@ -143,7 +143,7 @@ public class GameOver extends state implements InputProcessor {
         home.dispose();
         replay.dispose();
         HardPlayState.mus.dispose();
-
+        bl.dispose();
     }
 
     @Override
