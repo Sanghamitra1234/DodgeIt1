@@ -10,16 +10,18 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.sleepygamers.game.DodgeIt;
 
+import static com.sleepygamers.game.DodgeIt.ggg;
+
 /**
  * Created by Akash on 30-01-2017.
  */
 
 public class HighscoreState extends state implements InputProcessor {
+    int high;
     private BitmapFont fnt;
     private Texture yb, cl, hard, time;
     private Rectangle cl1, time1, hard1;
     private Vector3 touchpt;
-    int high;
 
     HighscoreState(GameStateManager gameStateManager) {
         super(gameStateManager);
@@ -35,6 +37,12 @@ public class HighscoreState extends state implements InputProcessor {
         time1 = new Rectangle(175, 200, 100, 100);
         hard1 = new Rectangle(330, 200, 100, 100);
         touchpt = new Vector3(0, 0, 0);
+        ggg = 21;
+        DodgeIt.playServices.submitScore(DodgeIt.preferences.getInteger("HighScore"));
+        ggg = 22;
+        DodgeIt.playServices.submitScore(DodgeIt.preferences.getInteger("HighScoreTime"));
+        ggg = 23;
+        DodgeIt.playServices.submitScore(DodgeIt.preferences.getInteger("HighScoreHard"));
     }
 
     @Override
@@ -42,17 +50,17 @@ public class HighscoreState extends state implements InputProcessor {
         if (Gdx.input.justTouched()) {
             camera.unproject(touchpt.set(Gdx.input.getX(), Gdx.input.getY(), 0));
             if (OverlapTester.pointInRectangle(cl1, touchpt.x, touchpt.y)) {
-                DodgeIt.chk5 = 1;
-                MenuState.game.playServices.showScore();
+                ggg = 21;
+                DodgeIt.playServices.showScore();
 
             }
             if (OverlapTester.pointInRectangle(time1, touchpt.x, touchpt.y)) {
-                DodgeIt.chk5 = 2;
-                MenuState.game.playServices.showScore();
+                ggg = 22;
+                DodgeIt.playServices.showScore();
             }
             if (OverlapTester.pointInRectangle(hard1, touchpt.x, touchpt.y)) {
-                DodgeIt.chk5 = 3;
-                MenuState.game.playServices.showScore();
+                ggg = 23;
+                DodgeIt.playServices.showScore();
             }
         }
     }

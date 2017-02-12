@@ -13,8 +13,8 @@ import com.google.example.games.basegameutils.GameHelper;
 import static com.sleepygamers.game.DodgeIt.ggg;
 
 public class AndroidLauncher extends AndroidApplication implements PlayServices {
-    private GameHelper gameHelper;
     private final static int requestCode = 1;
+    private GameHelper gameHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,15 +142,15 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     @Override
     public void submitScore(int highScore) {
         if (isSignedIn() == true) {
-            if (DodgeIt.chk5 == 1) {
+            if (ggg == 21) {
                 Games.Leaderboards.submitScore(gameHelper.getApiClient(),
                         getString(R.string.leaderboard_classic), highScore);
             }
-            if (DodgeIt.chk5 == 2) {
+            if (ggg == 22) {
                 Games.Leaderboards.submitScore(gameHelper.getApiClient(),
                         getString(R.string.leaderboard_time_attack), highScore);
             }
-            if (DodgeIt.chk5 == 3) {
+            if (ggg == 23) {
                 Games.Leaderboards.submitScore(gameHelper.getApiClient(),
                         getString(R.string.leaderboard_hard_core), highScore);
             }
@@ -170,15 +170,15 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     @Override
     public void showScore() {
         if (isSignedIn() == true) {
-            if (DodgeIt.chk5 == 1) {
+            if (ggg == 21) {
                 startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(),
                         getString(R.string.leaderboard_classic)), requestCode);
             }
-            if (DodgeIt.chk5 == 2) {
+            if (ggg == 22) {
                 startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(),
                         getString(R.string.leaderboard_time_attack)), requestCode);
             }
-            if (DodgeIt.chk5 == 3) {
+            if (ggg == 23) {
                 startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(),
                         getString(R.string.leaderboard_hard_core)), requestCode);
             }
