@@ -22,6 +22,11 @@ import static com.sleepygamers.game.DodgeIt.ggg;
  */
 
 public class TimeAttackPlayState extends state implements InputProcessor {
+    public static Music mus;
+    public static Sound gameover;
+    public float TimePassed = 0, timeDelay = 0;
+    public int score = 0, time = 0;
+    public Sound collect;
     private int FLAGtch = 0;
     private int cnt = 0, ppl = 0;
     private int newballcnt = 0;
@@ -30,16 +35,11 @@ public class TimeAttackPlayState extends state implements InputProcessor {
     private BitmapFont fnt;
     private int usrrctcnt = 0;
     private int Strt = 0;
-    public float TimePassed = 0, timeDelay = 0;
-    public int score = 0, time = 0;
     private int currentColor = 0;
     private Vector3 touchpt;
     private Texture userbtn, red, blue, green, yellow, yellowBar, greenBar, blueBar, redBar;
     private Rectangle usr;
     private Random random;
-    public static Music mus;
-    public Sound collect;
-    public static Sound gameover;
 
     TimeAttackPlayState(GameStateManager gameStateManager) {
         super(gameStateManager);
@@ -118,21 +118,23 @@ public class TimeAttackPlayState extends state implements InputProcessor {
                 if (bl2.getRectangle().overlaps(usr)) {
                     if (currentColor == bl2.getClr()) {
                         score += 10;
-                        if (score >= 400) {
-                            ggg = 10;
-                            MenuState.game.playServices.unlockAchievement();
-                        } else if (score >= 200) {
-                            ggg = 9;
-                            MenuState.game.playServices.unlockAchievement();
-                        } else if (score >= 150) {
-                            ggg = 8;
-                            MenuState.game.playServices.unlockAchievement();
-                        } else if (score >= 100) {
-                            ggg = 7;
-                            MenuState.game.playServices.unlockAchievement();
-                        } else if (score >= 50) {
-                            ggg = 6;
-                            MenuState.game.playServices.unlockAchievement();
+                        if (DodgeIt.playServices.isSignedIn()) {
+                            if (score >= 400) {
+                                ggg = 10;
+                                DodgeIt.playServices.unlockAchievement();
+                            } else if (score >= 200) {
+                                ggg = 9;
+                                DodgeIt.playServices.unlockAchievement();
+                            } else if (score >= 150) {
+                                ggg = 8;
+                                DodgeIt.playServices.unlockAchievement();
+                            } else if (score >= 100) {
+                                ggg = 7;
+                                DodgeIt.playServices.unlockAchievement();
+                            } else if (score >= 50) {
+                                ggg = 6;
+                                DodgeIt.playServices.unlockAchievement();
+                            }
                         }
                         if (DodgeIt.SOUNDON == 1) {
                             collect.play();

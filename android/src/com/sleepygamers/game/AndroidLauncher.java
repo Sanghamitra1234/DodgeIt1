@@ -144,15 +144,12 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
         if (isSignedIn() == true) {
             if (ggg == 21) {
                 Games.Leaderboards.submitScore(gameHelper.getApiClient(),
-                        getString(R.string.leaderboard_classic), highScore);
-            }
-            if (ggg == 22) {
+                        "CgkIur6K0OoQEAIQB", highScore);
+            } else if (ggg == 22) {
+                Games.Leaderboards.submitScore(gameHelper.getApiClient(), "CgkIur6K0OoQEAIQEQ", highScore);
+            } else {
                 Games.Leaderboards.submitScore(gameHelper.getApiClient(),
-                        getString(R.string.leaderboard_time_attack), highScore);
-            }
-            if (ggg == 23) {
-                Games.Leaderboards.submitScore(gameHelper.getApiClient(),
-                        getString(R.string.leaderboard_hard_core), highScore);
+                        "CgkIur6K0OoQEAIQEg", highScore);
             }
         }
     }
@@ -171,16 +168,15 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     public void showScore() {
         if (isSignedIn() == true) {
             if (ggg == 21) {
-                startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(),
-                        getString(R.string.leaderboard_classic)), requestCode);
+                startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(), "CgkIur6K0OoQEAIQB"), requestCode);
             }
             if (ggg == 22) {
                 startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(),
-                        getString(R.string.leaderboard_time_attack)), requestCode);
+                        "CgkIur6K0OoQEAIQEQ"), requestCode);
             }
             if (ggg == 23) {
                 startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(),
-                        getString(R.string.leaderboard_hard_core)), requestCode);
+                        "CgkIur6K0OoQEAIQEg"), requestCode);
             }
         } else {
             signIn();

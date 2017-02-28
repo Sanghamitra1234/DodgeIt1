@@ -25,28 +25,24 @@ import static com.sleepygamers.game.DodgeIt.ggg;
  */
 
 public class HardPlayState extends state implements InputProcessor {
-    private int FLAGtch = 0;
     public static Music mus;
     public static Sound gameover;
-    private int cnt = 0, ppl = 0;
     public static int firstball = 0;
+    private static Vector3 touchpt;
+    private static Rectangle usr;
+    public float TimePassed = 0, tm = 0;
+    public int score = 0, scoreDelay = 0;
+    private int FLAGtch = 0;
+    private int cnt = 0, ppl = 0;
     private Array<ballsHard> bl;
     private int index = 0, lvl = 150;
     private BitmapFont fnt;
     private int usrrctcnt = 0;
     private int Strt = 0;
-    public float TimePassed = 0, tm = 0;
-    public int score = 0, scoreDelay = 0;
-    private static Vector3 touchpt;
     private Texture userbtn, hardBall;
     private TextureAtlas hrdbl;
     private Animation animation;
-    private static Rectangle usr;
     private Random random;
-
-    public static Rectangle getUsr() {
-        return usr;
-    }
 
     HardPlayState(GameStateManager gameStateManager) {
         super(gameStateManager);
@@ -70,13 +66,17 @@ public class HardPlayState extends state implements InputProcessor {
         camera.setToOrtho(false, DodgeIt.WIDTH, DodgeIt.HIGHT);
     }
 
-    @Override
-    public void handleInput() {
-
+    public static Rectangle getUsr() {
+        return usr;
     }
 
     public static Vector3 getTouchpt() {
         return touchpt;
+    }
+
+    @Override
+    public void handleInput() {
+
     }
 
     @Override
@@ -89,21 +89,23 @@ public class HardPlayState extends state implements InputProcessor {
         if (FLAGtch == 2) {
             TimePassed += Gdx.graphics.getDeltaTime();
             score = (int) (TimePassed * 5);
-            if (score >= 1500) {
-                ggg = 15;
-                MenuState.game.playServices.unlockAchievement();
-            } else if (score >= 800) {
-                ggg = 14;
-                MenuState.game.playServices.unlockAchievement();
-            } else if (score >= 500) {
-                ggg = 13;
-                MenuState.game.playServices.unlockAchievement();
-            } else if (score >= 100) {
-                ggg = 12;
-                MenuState.game.playServices.unlockAchievement();
-            } else if (score >= 50) {
-                ggg = 11;
-                MenuState.game.playServices.unlockAchievement();
+            if (DodgeIt.playServices.isSignedIn()) {
+                if (score >= 1500) {
+                    ggg = 15;
+                    DodgeIt.playServices.unlockAchievement();
+                } else if (score >= 800) {
+                    ggg = 14;
+                    DodgeIt.playServices.unlockAchievement();
+                } else if (score >= 500) {
+                    ggg = 13;
+                    DodgeIt.playServices.unlockAchievement();
+                } else if (score >= 100) {
+                    ggg = 12;
+                    DodgeIt.playServices.unlockAchievement();
+                } else if (score >= 50) {
+                    ggg = 11;
+                    DodgeIt.playServices.unlockAchievement();
+                }
             }
             if (firstball == 0) {
                 bl.add(new ballsHard());
@@ -111,7 +113,7 @@ public class HardPlayState extends state implements InputProcessor {
             }
             for (ballsHard bl1 : bl) {
                 bl1.updatePos();
-                if (bl1.getRectangle().overlaps(usr)){
+                if (bl1.getRectangle().overlaps(usr)) {
                     if (DodgeIt.MUSICON == 1) {
                         mus.stop();
                     }

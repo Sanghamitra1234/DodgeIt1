@@ -9,8 +9,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.sleepygamers.game.DodgeIt;
 
-import static com.sleepygamers.game.DodgeIt.ggg;
-
 /**
  * Created by Akash on 30-01-2017.
  */
@@ -113,23 +111,19 @@ public class GameOver extends state implements InputProcessor {
                 fnt1.draw(spriteBatch, "High Score", 120, 400);
                 DodgeIt.preferences.putInteger("HighScore", score1);
                 DodgeIt.preferences.flush();
-                ggg = 21;
-                DodgeIt.playServices.submitScore(score1);
+                DodgeIt.playServices.submitScore(DodgeIt.preferences.getInteger("HighScore"));
             }
             if (gamee != 1 && gamee != 0 && (score1 >= DodgeIt.preferences.getInteger("HighScoreTime"))) {
                 fnt1.draw(spriteBatch, "High Score", 110, 400);
                 DodgeIt.preferences.putInteger("HighScoreTime", score1);
                 DodgeIt.preferences.flush();
-                ggg = 22;
-                DodgeIt.playServices.submitScore(score1);
+                DodgeIt.playServices.submitScore(DodgeIt.preferences.getInteger("HighScoreTime"));
             }
             if (gamee == 1 && (score1 >= DodgeIt.preferences.getInteger("HighScoreHard"))) {
                 fnt1.draw(spriteBatch, "High Score", 110, 400);
                 DodgeIt.preferences.putInteger("HighScoreHard", score1);
                 DodgeIt.preferences.flush();
-                ggg = 23;
-                DodgeIt.playServices.submitScore(score1);
-
+                DodgeIt.playServices.submitScore(DodgeIt.preferences.getInteger("HighScoreHard"));
             }
         }
         spriteBatch.end();
